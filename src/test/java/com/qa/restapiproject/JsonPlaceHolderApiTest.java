@@ -5,12 +5,23 @@ import java.util.List;
 import java.util.Map;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import com.qa.restapiproject.utility.EmailAddressValidator;
 
 import io.restassured.RestAssured;
+
 
 public class JsonPlaceHolderApiTest {
 
 	JsonPlaceHolderApi jsonPlaceHolderApi = new JsonPlaceHolderApi() ; 
+	EmailAddressValidator emailValidator= new EmailAddressValidator();
+	
+	
+	/**
+	 * @param userName
+	 * @param baseUrl
+	 * This method will fetch the comments for each post written by given user 
+	 * and will validate the email address for each comment 
+	 */
 	@Test
 	@Parameters({"userName","baseUrl"})
 	public void getCommentsAndValidateEmailAddress(String userName, String baseUrl)
@@ -34,7 +45,7 @@ public class JsonPlaceHolderApiTest {
 				System.out.println("*****The Email ID and Comment for CommentID: " + commentid+ "****** is: \n"+ "Emaild :"+emailId +"\n"+ "Comment :" +commentBody);
 				System.out.println("________________________________________________________________________");
 				System.out.println("******check for emailAdress Validity started*****");
-				Boolean isEmailAddressVaild= jsonPlaceHolderApi.isEmailIdValid(emailId);
+				Boolean isEmailAddressVaild= emailValidator.isEmailIdValid(emailId);
 				if(isEmailAddressVaild)
 				{
 					System.out.println(" ***** The "+emailId+" :********** is a valid email ID**************");
