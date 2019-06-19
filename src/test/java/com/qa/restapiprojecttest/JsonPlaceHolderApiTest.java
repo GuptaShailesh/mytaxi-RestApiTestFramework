@@ -1,9 +1,6 @@
-package com.qa.restapiproject;
-
+package com.qa.restapiprojecttest;
 import static org.testng.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
@@ -13,7 +10,7 @@ import org.testng.ITestContext;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-
+import com.qa.restapiproject.JsonPlaceHolderApi;
 import com.qa.restapiproject.utility.EmailAddressValidator;
 
 import io.restassured.RestAssured;
@@ -152,7 +149,7 @@ public class JsonPlaceHolderApiTest {
 	{
 		logger.info("\n######### " + context.getName()+ " Started: ##########\n");
 		RestAssured.baseURI=baseUrl;
-		
+
 		try {
 			postIds=  jsonPlaceHolderApi.getPostIds(userId);
 			Assert.assertEquals(postIds.size(),expectedPostIdCount, "Invalid response from posts Api ");
@@ -193,6 +190,7 @@ public class JsonPlaceHolderApiTest {
 		}
 
 	}
+
 
 
 
