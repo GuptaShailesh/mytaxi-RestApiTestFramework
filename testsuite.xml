@@ -1,10 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="myTaxi-restApiTest">
+<suite name="myTaxi-restApiTest" preserve-order="true" thread-count="1" >
 
  <parameter name="baseUrl" value="https://jsonplaceholder.typicode.com"/>
- 
-  <test thread-count="1" name="Get comments and validate the email address format for each comment">
+
+<!-- 
+Before testing E2E test cases or Integration test cases between Apis, 
+we should also test the individual response for each APi hence writing some validation testcases around each api 
+--> 
+
+<!-- Validation testcases for users Api -->
+
+<test name="Validate the users api response with valid users and valid id">
+    <classes>
+      <class name="com.qa.restapiproject.JsonPlaceHolderApiTest">
+      <methods>
+     <parameter name="userName" value="Samantha"/>
+     <parameter name="expectedUserId" value="3"/>
+      <include name="validateUsersApiResponse" />
+      </methods>
+     </class>
+    </classes>
+  </test> <!-- Test -->
+  
+<test name="Validate the users api response with Invalid userName and valid id">
+    <classes>
+      <class name="com.qa.restapiproject.JsonPlaceHolderApiTest">
+      <methods>
+     <parameter name="userName" value=""/>
+     <parameter name="expectedUserId" value=""/>
+      <include name="validateUsersApiResponse" />
+      </methods>
+     </class>
+    </classes>
+  </test>  <!-- Test -->
+  
+<!-- Validation testcases for posts  Api -->
+
+<test name="Validate the posts api response with valid userId and valid postsID">
+    <classes>
+      <class name="com.qa.restapiproject.JsonPlaceHolderApiTest">
+      <methods>
+     <parameter name="userId" value="3"/>
+     <parameter name="expectedPostIdCount" value="10"/>
+      <include name="validatePostsApiResponse" />
+      </methods>
+     </class>
+    </classes>
+  </test> 
+  
+<test name="Validate the posts api response with Invalid userId and valid postsID">
+    <classes>
+      <class name="com.qa.restapiproject.JsonPlaceHolderApiTest">
+      <methods>
+     <parameter name="userId" value=""/>
+     <parameter name="expectedPostIdCount" value="0"/>
+      <include name="validatePostsApiResponse" />
+      </methods>
+     </class>
+    </classes>
+  </test>  <!-- Test -->
+  
+  <!-- Validation testcases for comments Api -->
+  
+  <test name="Validate the comments api response with valid postId and valid comments count">
+    <classes>
+      <class name="com.qa.restapiproject.JsonPlaceHolderApiTest">
+      <methods>
+     <parameter name="postId" value="21"/>
+     <parameter name="expectedTotalComments" value="5"/>
+      <include name="validateCommentsApiResponse" />
+      </methods>
+     </class>
+    </classes>
+  </test> 
+  
+<test name="Validate the comments api response with Invalid postId and valid comments count">
+    <classes>
+      <class name="com.qa.restapiproject.JsonPlaceHolderApiTest">
+      <methods>
+     <parameter name="postId" value="0"/>
+     <parameter name="expectedTotalComments" value="0"/>
+      <include name="validateCommentsApiResponse" />
+      </methods>
+     </class>
+    </classes>
+  </test>  <!-- Test -->
+  
+  
+  <!-- Take Home tests problem solution -->
+  
+   <test name="Get comments and validate the email address format for each comment" preserve-order="true">
     <classes>
       <class name="com.qa.restapiproject.JsonPlaceHolderApiTest">
       <methods>
@@ -13,5 +99,8 @@
       </methods>
      </class>
     </classes>
-  </test> <!-- Test -->
-</suite> <!-- Suite -->
+  </test>  
+  
+</suite> 
+ 
+
