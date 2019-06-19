@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="ERROR">
     <Properties>
-        <Property name="basePath">../mytaxi-RestApiTestFramework/target/logs</Property>
+        <Property name="basePath">../mytaxi-RestApiTestFramework/target/surefire-reports/logs</Property>
     </Properties>
     <Appenders>
         <!-- File Appender -->
