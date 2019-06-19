@@ -1,10 +1,13 @@
 package com.qa.restapiproject;
 
+import static org.testng.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -32,63 +35,74 @@ public class JsonPlaceHolderApiTest {
 	public void getCommentsAndValidateEmailAddressFormat(String userName, String baseUrl, ITestContext context)
 	{
 
-		logger.info("-----------The "+context.getName()+ " Test: Started------ \n");
+		logger.info("\n################### The "+context.getName()+ " Test: Started ###############\n");
 
 		RestAssured.baseURI=baseUrl;
-		ArrayList <Map<String,?>>allCommentsforpostId ;
+		List <Map<String,?>>allCommentsforpostId ;
 		try {
 
 
 			//This method call will return the Id of the  given user
-			logger.info("--------Getting the UserID of user *"+userName+"*---------------------- \n");
+			logger.info("\n--------Getting the UserID of user *"+userName+"*---------------------- \n");
+
+			
 			String  userId= jsonPlaceHolderApi.getUserid(userName);
-			
-			
+			Assert.assertTrue(!(userId.isEmpty()),"The userId not found for user: "+userName);
+
 			//This method call will return the list of Ids of all the posts posted by given user
 			logger.info("--------Getting all the postsIDs for the posts written by user *"+userName+"* having UserId *"+userId+"*-------------- \n");
 			List<Integer> postIds= jsonPlaceHolderApi.getPostIds(userId);
+			Assert.assertTrue(!(postIds.isEmpty()), "No posts found for user with userID: "+ userId);
+
+			/*	This for each loop will iterate over each post Ids and will fetch comments Id and EmailId
+				Related to each post and will validate the each email ID*/
 			
-			
-		/*	This foreach loop will iterate over each post Ids and will fetch comments Id and EmailId
-		Related to each post and will validate the each email ID*/
 			logger.info("---------Fetching the comments for each PostIds and Validating the emailId Format------------");
 			for(int postId: postIds)
 			{
 				allCommentsforpostId = jsonPlaceHolderApi.getCommentsForPostId(postId); 
 
-				for(Map<String,?>commentBlock :allCommentsforpostId)
+				if(allCommentsforpostId.isEmpty())
 				{
-					String commentBody = (String) commentBlock.get("body");
-					String emailId= (String) commentBlock.get("email");
-					int commentid = (Integer) commentBlock.get("id");
-					
-					logger.info("_________________________________________________________________________________________________________________");
-					logger.info("--------------The Email ID and Comments for CommentID: *" + commentid+ "* is: \n"+ "Emaild :"+emailId +"\n"+ "Comment :" +commentBody);
-					logger.info("-----------check for emailAdress Validity started--------------------------------------");
-					Boolean isEmailAddressFormatVaild= emailValidator.isValidEmaiIdFormat(emailId);
-					if(isEmailAddressFormatVaild)
-					{
-						logger.info("--------------The ******"+emailId+" :********-----Format is correct-----------\n");
-						logger.info("________________________________________________________________________________________________________________\n");
-					}
-					else {
-						logger.info("--------------The ******"+emailId+" :********-----Format is incorrect-----------");
-						logger.info("_________________________________________________________________________________________________________________\n");
-					}
-
-
+					logger.warn("No comments found for Post ID: " +postId);
 				}
 
+				else {
+					for(Map<String,?>commentBlock :allCommentsforpostId)
+					{
+						String commentBody = (String) commentBlock.get("body");
+						String emailId= (String) commentBlock.get("email");
+						int commentid = (Integer) commentBlock.get("id");
+
+						logger.info("##############################_________________________________________________________________________________________________________________\n");
+						logger.info("\n--------------Printing the Email ID and Comments, for CommentID: *" + commentid+ "*------------------\n"+ "EMAILID :**"+emailId +"**\n"+ "COMMENTS :\\**" +commentBody +"**/\n");
+						logger.info("-----------check for emailAdress Validity started--------------------------------------");
+						Boolean isEmailAddressFormatVaild= emailValidator.isValidEmaiIdFormat(emailId);
+						if(isEmailAddressFormatVaild)
+						{
+							logger.info("--------------The Format of EmailID : ******"+emailId+" ********----- is correct-----------\n");
+							logger.info("\n________________________________________________________________________________________________________________##################\n");
+						}
+						else {
+							logger.info("--------------The Format of EmailID:  ******"+emailId+" :********-----is incorrect-----------\n");
+							logger.info("\n_________________________________________________________________________________________________________________####################");
+						}
+
+
+					}
+				}
 			}
-			logger.info("-----------The "+context.getName()+ " Test: Completed-------------------------------");
+
+			logger.info("\n ############ The "+context.getName()+ " Test: Completed #########################\n");
 		}
 		catch (Exception e)
 		{
-			logger.error("-----------The "+context.getName()+" Test: Failed with Exception : -------" +e.getMessage());
+			e.printStackTrace();
+			fail("\n ####### The "+context.getName()+" Test: Failed with Exception : ############" +e.getMessage());
+			
 		}
+		
+
+
 	}
-
-
-
-
 }

@@ -24,7 +24,7 @@ public class JsonPlaceHolderApi {
 	private static final Logger logger = LogManager.getLogger(JsonPlaceHolderApi.class);
 	/**
 	 * @param userName
-	 * @return String 
+	 * @return userId of the given user 
 	 */
 	public String getUserid(String userName) {
 		
@@ -32,37 +32,41 @@ public class JsonPlaceHolderApi {
 				.response();
 		jsonPath = RawToJsonXmlConverter.rawToJson(response);
 		String userid = jsonPath.getString("id").replaceAll("\\[", "").replaceAll("\\]", "");
-		logger.info("-------Got the userid of user *"+userName+"* : ---- ");
+		logger.info("-------Returning the userid of user *"+userName+"* : ---- ");
 		return userid;
-		
+
 	}
 
 	/**
 	 * @param userId
-	 * @return list
+	 * @return list of posts id for given userId
 	 */
 	public List<Integer> getPostIds(String userId) {
 		response = given().queryParam("userId", userId).when().get("/posts").then().statusCode(200).extract()
 				.response();
+
 		jsonPath = RawToJsonXmlConverter.rawToJson(response);
 		List<Integer> postIds = jsonPath.getList("id");
-		logger.info("-------Got all the post IDs written by user with *"+userId+"* Id ------- ");
+		logger.info("-------Returning the post IDs written by user with Id *"+userId+"* ------- ");
 		return postIds;
 	}
 
 	/**
 	 * @param postid
-	 * @return
+	 * @return list of all the comments for given postId
+	 * 
 	 */
-	public ArrayList<Map<String,?>> getCommentsForPostId(int postid) {
+	public List<Map<String,?>> getCommentsForPostId(int postid) 
+	{
+		ArrayList<Map<String, ?>> allcommentsforPostId = null;
 		response = given().queryParam("postId", postid).when().get("/comments").then().statusCode(200).extract()
 				.response();
 		jsonPath = RawToJsonXmlConverter.rawToJson(response);
-		ArrayList<Map<String, ?>> allcommentsforPostId = jsonPath.get("");
-		logger.info("-------Got all the comments written for the post having  *"+postid+"* PostId --------- ");
+		allcommentsforPostId = jsonPath.get("");
+
+		logger.info("\n-------Returning the comments written for the post having PostId : **"+postid+"** ---------\n");
+
 		return allcommentsforPostId;
+
 	}
-
-	
-
 }
