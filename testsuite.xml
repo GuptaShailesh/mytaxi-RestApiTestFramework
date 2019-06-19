@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Suite">
+<suite name="myTaxi-restApiTest">
+
  <parameter name="baseUrl" value="https://jsonplaceholder.typicode.com"/>
-  <test thread-count="1" name="Test">
+ 
+  <test thread-count="1" name="Get comments and validate the email address format for each comment">
     <classes>
       <class name="com.qa.restapiproject.JsonPlaceHolderApiTest">
       <methods>
      <parameter name="userName" value="Samantha"/>
-      <include name="getCommentsAndValidateEmailAddress" />
+      <include name="getCommentsAndValidateEmailAddressFormat" />
       </methods>
      </class>
     </classes>
